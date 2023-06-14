@@ -1,0 +1,81 @@
+@import url(./common.css);
+@import url(./font.css);
+
+.room_box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.small_room {
+  width: calc((100vw - 300px) / 2);
+  height: 100px;
+  background-color: var(--semi-white);
+  border-radius: 5px;
+  padding: 10px 20px;
+  align-items: center;
+}
+.small_room:hover {
+  outline: 3px solid var(--black);
+  background-color: var(--white);
+}
+.small_room h1 {
+  margin-right: auto;
+}
+
+.meta {
+  align-items: center;
+}
+
+.unlock {
+  margin-left: 20px;
+  margin-bottom: 14px;
+}
+
+.profile_box {
+  justify-content: flex-end;
+}
+.sub_profile {
+  padding-left: 10px;
+}
+
+.room_controller {
+  margin-top: 20px;
+  width: calc(100vw - 280px);
+  height: 50px;
+  background-color: var(--semi-white);
+  border-radius: 5px;
+  padding: 12px 15px;
+  position: relative;
+}
+
+.room_controller span {
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.room_controller span:hover {
+  color: var(--dark-gray);
+}
+
+.arrow_box {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  gap: 25px;
+}
+
+[class$="plus"] {
+  position: absolute;
+  right: 10px;
+}
+
+@media (max-width: 1024px) {
+  .room_box {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .small_room {
+    width: calc(100vw - 280px);
+  }
+}
