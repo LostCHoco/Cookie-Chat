@@ -1,10 +1,11 @@
-import Header from "./header";
-import Aside from "./aside";
-import Roombox from "./roombox";
-import Chatbox from "./chat";
-import { SignInForm, SignUpForm } from "./signForm";
-import homeStyle from "../css/home.css";
-import roomStyle from "../css/room.css";
+import Header from "components/header";
+import Aside from "components/aside";
+import Roombox from "components/roombox";
+import Chatbox from "components/chat";
+import { SignInForm, SignUpForm } from "components/signForm";
+import homeStyle from "css/home.css";
+import roomStyle from "css/room.css";
+
 export const Home = () => (
   <div id="body" style={homeStyle}>
     <Header />

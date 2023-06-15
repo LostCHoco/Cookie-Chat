@@ -1,11 +1,12 @@
-import profile from "../image/profile.png";
-import search from "../image/search.png";
-import mail from "../image/mail.png";
-import friend from "../image/friend.png";
-import lock from "../image/lock.png";
-import unlock from "../image/unlock.png";
+import search from "image/search.png";
+import mail from "image/mail.png";
+import friend from "image/friend.png";
+import lock from "image/lock.png";
+import unlock from "image/unlock.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { userState } from "loginState";
 const Setting = () => (
   <Link to="/" className="button flex">
     설정
@@ -20,6 +21,7 @@ const Logout = ({ logout }) => {
 };
 
 export const Profile = ({ logout }) => {
+  const { photo } = useRecoilValue(userState);
   const [profileClass, setClass] = useState("profile");
   function toggleSetting() {
     if (profileClass === "profile") {
@@ -30,7 +32,7 @@ export const Profile = ({ logout }) => {
   }
   return (
     <div className={profileClass}>
-      <img src={profile} alt="profile" onClick={toggleSetting} />
+      <img src={photo} alt="profile" onClick={toggleSetting} />
       <div className="user_setting_box flex">
         <Setting />
         <Logout logout={logout} />
@@ -39,9 +41,10 @@ export const Profile = ({ logout }) => {
   );
 };
 export const SubProfile = () => {
+  const { photo } = useRecoilValue(userState);
   return (
     <div className="sub_profile">
-      <img src={profile} alt="profile" />
+      <img src={photo} alt="profile" />
     </div>
   );
 };

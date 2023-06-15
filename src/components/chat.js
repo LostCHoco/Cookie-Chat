@@ -1,6 +1,8 @@
 import { useReducer, useState } from "react";
 import { getFullTime } from "../function/date";
 import { SubProfile } from "./icon";
+import { useRecoilValue } from "recoil";
+import { userState } from "loginState";
 
 const Output = ({ task }) => {
   const { user, date, text } = task;
@@ -17,15 +19,16 @@ const Output = ({ task }) => {
     </div>
   );
 };
-const Input = ({ propFunc, user }) => {
+const Input = ({ propFunc }) => {
   const [row, setRow] = useState(1);
   const [isSend, setSendState] = useState(false);
   const [content, setContent] = useState("");
+  const { name } = useRecoilValue(userState);
 
   function sendMsg(e) {
     const text = e.target.value;
     if (e.keyCode === 13 && e.shiftKey === false && text !== "") {
-      const data = { user: user, date: getFullTime(), text: text };
+      const data = { user: name, date: getFullTime(), text: text };
       propFunc(data);
       setContent("");
       setRow(1);

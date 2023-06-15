@@ -16,7 +16,6 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  /* cursor: default; */
 }
 
 ul {
@@ -38,7 +37,6 @@ img {
 body {
   color: var(--black);
   font-family: "Inter", sans-serif;
-  /* padding-top: 50px; */
   font-size: 16px;
 }
 
@@ -66,9 +64,6 @@ header {
   justify-content: space-between;
   height: 50px;
   padding: 0 20px;
-  /* position: fixed;
-  top: 0;
-  left: 0; */
   width: 100vw;
 }
 header img {
@@ -182,4 +177,8 @@ form button {
 
 :is(.sub_profile, .unlock) img {
   height: 30px;
+}
+
+img[alt="profile"] {
+  border-radius: 100%;
 }

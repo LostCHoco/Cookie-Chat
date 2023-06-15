@@ -1,30 +1,18 @@
 import { useState } from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { app } from "../server/firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { signInError } from "../function/error";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { userState } from "./repository";
+import auth from "auth";
 
 export const SignInForm = () => {
   const [id, setId] = useState("");
   const [pwd, setPwd] = useState("");
   const nav = useNavigate();
-  const setUserData = useSetRecoilState(userState);
 
   async function login() {
-    const auth = getAuth(app);
     try {
-      const credential = await signInWithEmailAndPassword(auth, id, pwd);
-      const user = credential.user.reloadUserInfo;
-      // window.location.pathname = "/";
+      await signInWithEmailAndPassword(auth, id, pwd);
       nav("/");
-      setUserData({
-        islogin: true,
-        UID: user.localId,
-        email: user.email,
-        name: user.displayName,
-      });
     } catch (e) {
       signInError(e);
     }

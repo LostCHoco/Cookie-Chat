@@ -1,9 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import imgHome from "../image/home.png";
-import { Search, Friend, Mail, Profile } from "./icon";
-import { useState } from "react";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
-import { app } from "../server/firebase";
+import { Profile } from "./icon";
+import { signOut } from "firebase/auth";
+import auth from "auth";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { defaultState, userState } from "loginState";
 
 const Login = () => (
   <>
@@ -22,26 +23,19 @@ const Login = () => (
 const UserBox = ({ logout }) => {
   return (
     <div className="user_box flex">
-      <Search />
-      <Friend />
-      <Mail />
       <Profile logout={logout} />
     </div>
   );
 };
 
 const Header = ({ title = "쿠키챗" }) => {
-  const [isLogin, setState] = useState(false);
-  const auth = getAuth(app);
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // console.log(user.displayName);
-      setState(true);
-    }
-  });
+  const nav = useNavigate();
+  const { isLogin } = useRecoilValue(userState);
+  const setuserState = useSetRecoilState(userState);
   async function logout() {
     await signOut(auth);
-    setState(false);
+    setuserState(defaultState);
+    nav("/");
   }
   return (
     <header>
