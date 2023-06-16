@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import { signInError } from "../function/error";
 import { useNavigate } from "react-router-dom";
 import auth from "auth";
@@ -17,8 +21,18 @@ export const SignInForm = () => {
       signInError(e);
     }
   }
+  function googleLogin() {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        nav("/");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   return (
-    <form className="signin">
+    <form className="sign">
       <label htmlFor="id">아이디</label>
       <input
         type="text"
@@ -36,13 +50,16 @@ export const SignInForm = () => {
       <button type="button" onClick={login}>
         로그인
       </button>
+      <button type="button" onClick={googleLogin}>
+        구글 로그인
+      </button>
     </form>
   );
 };
 
 export const SignUpForm = () => {
   return (
-    <form className="signup">
+    <form className="sign">
       <span>아이디</span>
       <input type="text" />
       <span>비밀번호</span>

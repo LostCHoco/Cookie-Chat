@@ -3,6 +3,7 @@ import { getFullTime } from "../function/date";
 import { SubProfile } from "./icon";
 import { useRecoilValue } from "recoil";
 import { userState } from "loginState";
+import { socket } from "socket";
 
 const Output = ({ task }) => {
   const { user, date, text } = task;
@@ -29,6 +30,7 @@ const Input = ({ propFunc }) => {
     const text = e.target.value;
     if (e.keyCode === 13 && e.shiftKey === false && text !== "") {
       const data = { user: name, date: getFullTime(), text: text };
+      socket.emit("request", data);
       propFunc(data);
       setContent("");
       setRow(1);

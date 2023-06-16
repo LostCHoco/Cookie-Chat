@@ -1,5 +1,4 @@
 @import url(./common.css);
-@import url(./font.css);
 
 .chat_box {
   width: calc(100vw - 280px);
