@@ -6,7 +6,7 @@ import unlock from "image/unlock.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
-import { userState } from "loginState";
+import { userState } from "repository";
 const Setting = () => (
   <Link to="/" className="button flex">
     설정

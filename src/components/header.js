@@ -3,8 +3,10 @@ import imgHome from "../image/home.png";
 import { Profile } from "./icon";
 import { signOut } from "firebase/auth";
 import auth from "auth";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { defaultState, userState } from "loginState";
+import { useRecoilState } from "recoil";
+import { defaultState, userState } from "repository";
+import { useEffect } from "react";
+import profile from "image/profile.png";
 
 const Login = () => (
   <>
@@ -30,11 +32,10 @@ const UserBox = ({ logout }) => {
 
 const Header = ({ title = "쿠키챗" }) => {
   const nav = useNavigate();
-  const { isLogin } = useRecoilValue(userState);
-  const setuserState = useSetRecoilState(userState);
+  const [{ isLogin }, setUserState] = useRecoilState(userState);
   async function logout() {
     await signOut(auth);
-    setuserState(defaultState);
+    setUserState(defaultState);
     nav("/");
   }
   return (

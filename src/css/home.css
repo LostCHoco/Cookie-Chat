@@ -1,5 +1,4 @@
 @import url(./common.css);
-@import url(//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css);
 
 [class^="xi-"] {
   transform: rotateZ(90deg);
@@ -17,7 +16,7 @@
   gap: 20px;
 }
 
-.small_room {
+.room_entrance {
   width: calc((100vw - 300px) / 2);
   height: 100px;
   background-color: var(--semi-white);
@@ -25,11 +24,11 @@
   padding: 10px 20px;
   align-items: center;
 }
-.small_room:hover {
+.room_entrance:hover {
   outline: 3px solid var(--black);
   background-color: var(--white);
 }
-.small_room h1 {
+.room_entrance h1 {
   margin-right: auto;
 }
 
@@ -37,6 +36,7 @@
   align-items: center;
 }
 
+.lock,
 .unlock {
   margin-left: 20px;
   margin-bottom: 14px;
@@ -102,17 +102,20 @@
   position: absolute;
   right: -41px;
   width: 20px;
+  cursor: pointer;
 }
 .input_box.count .number_controller {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
 }
-.number_controller input {
+.number_controller h3 {
   margin: 0;
   width: 60px;
   text-align: center;
+  cursor: default;
 }
+
 .number_controller .number_box {
   width: 60px;
   height: 30px;
@@ -127,7 +130,7 @@
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  .small_room {
+  .room_entrance {
     width: calc(100vw - 280px);
   }
 }

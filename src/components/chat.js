@@ -1,9 +1,10 @@
-import { useReducer, useState } from "react";
+import { useState } from "react";
 import { getFullTime } from "../function/date";
 import { SubProfile } from "./icon";
-import { useRecoilValue } from "recoil";
-import { userState } from "loginState";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { socket } from "socket";
+import { useParams } from "react-router-dom";
+import { userState, chatRepository } from "repository";
 
 const Output = ({ task }) => {
   const { user, date, text } = task;
@@ -11,7 +12,9 @@ const Output = ({ task }) => {
     <div className="output">
       <div className="date flex">
         <SubProfile />
-        <span>{user}</span>
+        <span>
+          <b>{user}</b>
+        </span>
         <p>{date}</p>
       </div>
       <div className="content">
@@ -20,7 +23,7 @@ const Output = ({ task }) => {
     </div>
   );
 };
-const Input = ({ propFunc }) => {
+const Input = ({ roomID }) => {
   const [row, setRow] = useState(1);
   const [isSend, setSendState] = useState(false);
   const [content, setContent] = useState("");
@@ -29,9 +32,8 @@ const Input = ({ propFunc }) => {
   function sendMsg(e) {
     const text = e.target.value;
     if (e.keyCode === 13 && e.shiftKey === false && text !== "") {
-      const data = { user: name, date: getFullTime(), text: text };
-      socket.emit("request", data);
-      propFunc(data);
+      const data = { id: roomID, user: name, date: getFullTime(), text: text };
+      socket.emit("chat-request", data);
       setContent("");
       setRow(1);
       setSendState(true);
@@ -45,7 +47,7 @@ const Input = ({ propFunc }) => {
   function checkSendState(e) {
     setContent(e.target.value);
     if (isSend) {
-      setContent(content);
+      setContent("");
       setSendState(false);
     }
   }
@@ -65,45 +67,28 @@ const Input = ({ propFunc }) => {
   );
 };
 
-const OutputBox = ({ tasks }) => {
+const OutputBox = ({ roomID }) => {
+  const [chatData, setChatData] = useRecoilState(chatRepository);
+  socket.off("chat-response");
+  socket.on("chat-response", (data) => {
+    setChatData(data);
+  });
+  const tasks = chatData[roomID] ?? [];
   return (
     <div className="output_box">
-      {tasks.map((task) => (
-        <Output task={task} key={task.id} />
-      ))}
+      {tasks.map((task, index) => {
+        return <Output task={task} key={index} />;
+      })}
     </div>
   );
 };
-const Chatbox = ({ user }) => {
-  const [tasks, dispatch] = useReducer(reducer, []);
-  let id = tasks.length;
-
-  function getText(data) {
-    dispatch({
-      id: id++,
-      user: data.user,
-      date: data.date,
-      text: data.text,
-    });
-  }
-
-  function reducer(tasks, action) {
-    return [
-      ...tasks,
-      {
-        id: action.id,
-        user: action.user,
-        date: action.date,
-        text: action.text,
-      },
-    ];
-  }
-
+const Chatbox = () => {
+  const room = useParams();
   return (
     <main>
       <div className="chat_box">
-        <OutputBox tasks={tasks} />
-        <Input propFunc={getText} user={user} />
+        <OutputBox roomID={room.id} />
+        <Input roomID={room.id} />
       </div>
     </main>
   );

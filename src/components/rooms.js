@@ -1,24 +1,30 @@
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { Unlock, SubProfile } from "./icon";
+import { Lock, Unlock } from "./icon";
 import { socket } from "socket";
+import { useRecoilState } from "recoil";
+import { roomRepository } from "repository";
+import { limitNumber } from "function/function";
 
-const SmallRoom = ({ title = "방 제목", max = 16 }) => {
+const RoomEntrance = ({
+  id = "",
+  max = "8",
+  title = "No Title",
+  isLock = false,
+}) => {
   const [current] = useState(0);
+  const url = `/room/${id}`;
   return (
-    <Link to="/room" className="small_room flex">
+    <Link to={url} className="room_entrance flex">
       <h1>{title}</h1>
       <div className="meta_Box">
         <div className="meta flex">
           <h3>
             {current} / {max}
           </h3>
-          <Unlock />
+          {isLock ? <Lock /> : <Unlock />}
         </div>
-        <div className="profile_box flex">
-          <SubProfile />
-          <SubProfile />
-        </div>
+        <div className="profile_box flex"></div>
       </div>
     </Link>
   );
@@ -44,8 +50,7 @@ const RoomtCreateSetting = ({ func }) => {
   const [pwd, setPwd] = useState("");
   const [number, setNumber] = useState(8);
   const titleRef = useRef();
-  // const pwdRef = useRef();
-  function changeLockState({ func }) {
+  function changeLockState() {
     if (isChecked) {
       setChecked(false);
       setLock(true);
@@ -58,13 +63,13 @@ const RoomtCreateSetting = ({ func }) => {
   function changePwd(e) {
     setPwd(e.target.value);
   }
-  function changeNumber(e) {
-    const value = e.target.value;
-    console.log(parseInt(value));
-    setNumber(value);
-  }
+
   function stepNumber(inc) {
-    setNumber((prev) => prev + inc);
+    setNumber((prev) => {
+      let value = parseInt(prev) + inc;
+      value = limitNumber(value);
+      return value;
+    });
   }
   function requestNewRoom() {
     const roomData = {
@@ -73,10 +78,9 @@ const RoomtCreateSetting = ({ func }) => {
       password: pwd,
       current: 0,
       max: number,
+      userList: [],
     };
     socket.emit("newRoom", roomData);
-  }
-  function cancelRoom() {
     func();
   }
   return (
@@ -100,14 +104,7 @@ const RoomtCreateSetting = ({ func }) => {
         <h3>방 정원</h3>
         <div className="number_controller flex">
           <i className="xi-caret-down" onClick={() => stepNumber(-1)}></i>
-          <input
-            max={32}
-            min={1}
-            type="number"
-            step="1"
-            value={number}
-            onChange={changeNumber}
-          />
+          <h3>{number}</h3>
           <i className="xi-caret-up" onClick={() => stepNumber(1)}></i>
         </div>
       </div>
@@ -115,7 +112,12 @@ const RoomtCreateSetting = ({ func }) => {
         <button type="button" onClick={requestNewRoom}>
           생성
         </button>
-        <button type="button" onClick={cancelRoom}>
+        <button
+          type="button"
+          onClick={() => {
+            func();
+          }}
+        >
           취소
         </button>
       </div>
@@ -123,9 +125,13 @@ const RoomtCreateSetting = ({ func }) => {
   );
 };
 
-const Roombox = () => {
+const Rooms = () => {
   const [isActive, setActive] = useState(false);
-
+  const [rooms, setRooms] = useRecoilState(roomRepository);
+  socket.off("rooms");
+  socket.on("rooms", (data) => {
+    setRooms(data);
+  });
   function setActiveState(state = false) {
     if (state) {
       setActive(true);
@@ -136,7 +142,20 @@ const Roombox = () => {
   return (
     <main>
       <div className="room_box">
-        <SmallRoom title="Test Room" />
+        <RoomEntrance title="Test Room" key="test" id="test" />
+        {rooms.map((room) => {
+          const { id, max, password, title } = room;
+          const isLock = password === "" ? false : true;
+          return (
+            <RoomEntrance
+              key={id}
+              id={id}
+              max={max}
+              title={title}
+              isLock={isLock}
+            />
+          );
+        })}
       </div>
       <RoomController func={setActiveState} />
       {isActive && <RoomtCreateSetting func={setActiveState} />}
@@ -144,4 +163,4 @@ const Roombox = () => {
   );
 };
 
-export default Roombox;
+export default Rooms;

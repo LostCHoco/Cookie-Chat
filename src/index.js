@@ -1,42 +1,30 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { RecoilRoot, useSetRecoilState } from "recoil";
-import { Home, SignIn, SignUp, Room } from "view";
+import { RecoilRoot, useRecoilValue } from "recoil";
+import { Home, SignIn, SignUp, Room, NotFound } from "view";
 import Test from "test";
 import "./css/common.css";
-import auth from "auth";
-import { onAuthStateChanged } from "firebase/auth";
-import { userState } from "loginState";
-import profile from "image/profile.png";
+import { toggleState } from "repository";
+import { Loading } from "components/loading";
+
+const Router = () => (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
+      <Route path="/room/:id" element={<Room />} />
+      <Route path="/test" element={<Test />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </BrowserRouter>
+);
 
 const App = () => {
-  const setUserState = useSetRecoilState(userState);
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUserState({
-          isLogin: true,
-          uid: user.uid,
-          email: user.email,
-          name: user.displayName,
-          photo: user.photoURL ?? profile,
-        });
-      }
-    });
-  });
+  const isLoad = useRecoilValue(toggleState("loadData"));
 
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/room" element={<Room />} />
-        <Route path="/test" element={<Test />} />
-      </Routes>
-    </BrowserRouter>
-  );
+  return isLoad ? <Router /> : <Loading />;
 };
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
