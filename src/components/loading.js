@@ -24,9 +24,7 @@ export const Loading = () => {
         auth.onAuthStateChanged((user) => {
           if (user) {
             setUserState({
-              isLogin: true,
               uid: user.uid,
-              email: user.email,
               name: user.displayName,
               photo: user.photoURL ?? profile,
             });
@@ -48,7 +46,7 @@ export const Loading = () => {
     if (isServerLoad && isUserLoad) {
       setLoad(true);
     }
-  }, [isServerLoad, isUserLoad]);
+  });
   return (
     <div className="loading flex">
       <h1> LOADING...</h1>

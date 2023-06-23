@@ -6,9 +6,7 @@ const JoinRoom = () => (
 
 const JoinList = () => (
   <div className="joinlist">
-    <h3>
-      <span>▼</span>참여 중인 채팅방
-    </h3>
+    <h3>참여 중인 채팅방</h3>
     <JoinRoom />
   </div>
 );

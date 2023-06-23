@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getFullTime } from "../function/date";
 import { SubProfile } from "./icon";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -37,6 +37,9 @@ const Input = ({ roomID }) => {
       setContent("");
       setRow(1);
       setSendState(true);
+      const chatBox = document.querySelector(".output_box");
+      const height = chatBox.scrollHeight;
+      chatBox.scrollTop = height;
     } else if (e.keyCode === 27) {
       setContent("");
       setRow(1);
@@ -74,6 +77,7 @@ const OutputBox = ({ roomID }) => {
     setChatData(data);
   });
   const tasks = chatData[roomID] ?? [];
+
   return (
     <div className="output_box">
       {tasks.map((task, index) => {

@@ -6,7 +6,7 @@ import { SignInForm, SignUpForm } from "components/signForm";
 import homeStyle from "css/home.css";
 import roomStyle from "css/room.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState, roomRepository } from "repository";
 import { socket } from "socket";
 
@@ -32,8 +32,13 @@ export const Room = () => {
   /*방의 아이디가 서버에 존재하면 채팅방을 보여주고,
     서버에 없으면 NotFound 페이지를 보여줌*/
   const isRoom = ids.includes(id);
+  const setRooms = useSetRecoilState(roomRepository);
   if (isRoom) {
-    socket.emit("enter-room", { id: id, name: user });
+    socket.emit("enter-room", { id: id, user: user });
+    socket.off("update-room");
+    socket.on("update-room", (data) => {
+      setRooms(data);
+    });
   }
   const room = rooms.find((element) => {
     return element.id === id;

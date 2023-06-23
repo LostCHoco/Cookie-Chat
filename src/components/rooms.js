@@ -1,18 +1,18 @@
 import { useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Lock, Unlock } from "./icon";
 import { socket } from "socket";
-import { useRecoilState } from "recoil";
-import { roomRepository } from "repository";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { getRooms, roomRepository } from "repository";
 import { limitNumber } from "function/function";
 
-const RoomEntrance = ({
+export const RoomEntrance = ({
   id = "",
+  current = "0",
   max = "8",
   title = "No Title",
   isLock = false,
 }) => {
-  const [current] = useState(0);
   const url = `/room/${id}`;
   return (
     <Link to={url} className="room_entrance flex">
@@ -36,10 +36,10 @@ const RoomController = ({ func }) => {
   return (
     <div className="room_controller flex">
       <div className="arrow_box flex">
-        <i className="xi-caret-down"></i>
-        <i className="xi-caret-up"></i>
+        <i className="xi-caret-down icon_button"></i>
+        <i className="xi-caret-up icon_button"></i>
       </div>
-      <i className="xi-plus" onClick={makeRoom}></i>
+      <i className="xi-plus icon_button" onClick={makeRoom}></i>
     </div>
   );
 };
@@ -103,9 +103,15 @@ const RoomtCreateSetting = ({ func }) => {
       <div className="input_box count">
         <h3>방 정원</h3>
         <div className="number_controller flex">
-          <i className="xi-caret-down" onClick={() => stepNumber(-1)}></i>
+          <i
+            className="xi-caret-down icon_button"
+            onClick={() => stepNumber(-1)}
+          ></i>
           <h3>{number}</h3>
-          <i className="xi-caret-up" onClick={() => stepNumber(1)}></i>
+          <i
+            className="xi-caret-up icon_button"
+            onClick={() => stepNumber(1)}
+          ></i>
         </div>
       </div>
       <div className="button_box flex">
@@ -127,11 +133,14 @@ const RoomtCreateSetting = ({ func }) => {
 
 const Rooms = () => {
   const [isActive, setActive] = useState(false);
-  const [rooms, setRooms] = useRecoilState(roomRepository);
+  const setRooms = useSetRecoilState(roomRepository);
+  const rooms = useRecoilValue(getRooms);
   socket.off("rooms");
   socket.on("rooms", (data) => {
+    console.log("응답");
     setRooms(data);
   });
+
   function setActiveState(state = false) {
     if (state) {
       setActive(true);
@@ -143,19 +152,7 @@ const Rooms = () => {
     <main>
       <div className="room_box">
         <RoomEntrance title="Test Room" key="test" id="test" />
-        {rooms.map((room) => {
-          const { id, max, password, title } = room;
-          const isLock = password === "" ? false : true;
-          return (
-            <RoomEntrance
-              key={id}
-              id={id}
-              max={max}
-              title={title}
-              isLock={isLock}
-            />
-          );
-        })}
+        {rooms}
       </div>
       <RoomController func={setActiveState} />
       {isActive && <RoomtCreateSetting func={setActiveState} />}

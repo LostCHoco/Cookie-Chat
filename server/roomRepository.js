@@ -42,3 +42,17 @@ export const setID = (arr = []) => {
   console.log(currentID, arr.length);
   return currentID;
 };
+
+export const updateUserlist = (arr = [], newItem) => {
+  const beforeSet = [];
+  arr.forEach((item) => {
+    beforeSet.push(item);
+  });
+  beforeSet.push(newItem);
+  const tmpSet = new Set(beforeSet);
+  const afterSet = [];
+  tmpSet.forEach((item) => {
+    afterSet.push(item);
+  });
+  return afterSet;
+};
