@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { getFullTime } from "../function/date";
 import { SubProfile } from "./icon";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -7,11 +7,12 @@ import { useParams } from "react-router-dom";
 import { userState, chatRepository } from "repository";
 
 const Output = ({ task }) => {
-  const { user, date, text } = task;
+  const { user, photo, date, text } = task;
+  //채팅 로그 컴포넌트 렌더링
   return (
     <div className="output">
       <div className="date flex">
-        <SubProfile />
+        <SubProfile photo={photo} />
         <span>
           <b>{user}</b>
         </span>
@@ -27,12 +28,18 @@ const Input = ({ roomID }) => {
   const [row, setRow] = useState(1);
   const [isSend, setSendState] = useState(false);
   const [content, setContent] = useState("");
-  const { name } = useRecoilValue(userState);
+  const { name, photo } = useRecoilValue(userState);
 
   function sendMsg(e) {
     const text = e.target.value;
     if (e.keyCode === 13 && e.shiftKey === false && text !== "") {
-      const data = { id: roomID, user: name, date: getFullTime(), text: text };
+      const data = {
+        id: roomID,
+        user: name,
+        photo: photo,
+        date: getFullTime(),
+        text: text,
+      };
       socket.emit("chat-request", data);
       setContent("");
       setRow(1);
@@ -54,6 +61,7 @@ const Input = ({ roomID }) => {
       setSendState(false);
     }
   }
+  //채팅 입력칸 컴포넌트 렌더링
   return (
     <div className="input">
       <textarea
@@ -77,7 +85,7 @@ const OutputBox = ({ roomID }) => {
     setChatData(data);
   });
   const tasks = chatData[roomID] ?? [];
-
+  //채팅 로그 컨테이너 컴포넌트 렌더링
   return (
     <div className="output_box">
       {tasks.map((task, index) => {
@@ -86,8 +94,10 @@ const OutputBox = ({ roomID }) => {
     </div>
   );
 };
+
 const Chatbox = () => {
   const room = useParams();
+  //채팅방 컴포넌트 렌더링
   return (
     <main>
       <div className="chat_box">

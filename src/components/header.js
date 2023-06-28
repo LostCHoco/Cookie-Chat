@@ -7,9 +7,10 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { defaultState, loginState, userState } from "repository";
 
 const Login = () => (
+  // 로그인 버튼 컴포넌트 렌더링
   <>
-    {window.location.pathname !== "/signin" ? (
-      <Link to="/signin">
+    {window.location.pathname !== "/" ? (
+      <Link to="/">
         <label className="login_btn">로그인</label>
       </Link>
     ) : (
@@ -20,13 +21,12 @@ const Login = () => (
   </>
 );
 
-const UserBox = ({ logout }) => {
-  return (
-    <div className="user_box flex">
-      <Profile logout={logout} />
-    </div>
-  );
-};
+const UserBox = ({ logout }) => (
+  //유저 프로필 컨테이너 컴포넌트 렌더링
+  <div className="user_box flex">
+    <Profile logout={logout} />
+  </div>
+);
 
 const Header = ({ title = "쿠키챗" }) => {
   const nav = useNavigate();
@@ -37,9 +37,10 @@ const Header = ({ title = "쿠키챗" }) => {
     setUserState(defaultState);
     nav("/");
   }
+  //헤더 컴포넌트 렌더링
   return (
     <header>
-      <Link to="/">
+      <Link to={isLogin ? "/room" : "/"}>
         <div className="header_logo">
           <img src={imgHome} alt="Home" />
         </div>

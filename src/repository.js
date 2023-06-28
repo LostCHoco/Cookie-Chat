@@ -1,11 +1,9 @@
-import { atom, atomFamily, selector, selectorFamily } from "recoil";
-import profile from "image/profile.png";
-import { RoomEntrance } from "components/rooms";
+import { atom, atomFamily, selector } from "recoil";
 
 export const defaultState = {
   uid: "",
   name: "",
-  photo: profile,
+  photo: "",
 };
 
 export const userState = atom({
@@ -21,6 +19,20 @@ export const loginState = selector({
     return isLogin;
   },
 });
+export const setNickname = selector({
+  key: "setNickname",
+  get: ({ get }) => {
+    return get(userState);
+  },
+  set: ({ set, get }, value) => {
+    const user = get(userState);
+    set(userState, {
+      uid: user.uid,
+      name: value,
+      photo: user.photo,
+    });
+  },
+});
 
 export const toggleState = atomFamily({
   key: "toggleState",
@@ -34,38 +46,25 @@ export const arrayState = atomFamily({
   key: "arrayState",
   default: [],
 });
-// const arraySelector = selectorFamily({
-//   key: "arraySelector",
-//   get:(key)=>({get})=>{
-//     const arr = get(arrayState(key));
-
-//   }
-// })
 
 export const roomRepository = atom({
   key: "roomRepository",
   default: [],
 });
-
-export const getRooms = selector({
-  key: "getRooms",
+export const getRoomsLength = selector({
+  key: "getRoomRepositoryLength",
   get: ({ get }) => {
     const rooms = get(roomRepository);
-    return rooms.map((room) => {
-      const { id, max, password, title } = room;
-      const isLock = password === "" ? false : true;
-      return (
-        <RoomEntrance
-          key={id}
-          id={id}
-          max={max}
-          title={title}
-          isLock={isLock}
-        />
-      );
-    });
+    return rooms.length;
   },
 });
+// export const getNameArray = selector({
+//   key: "getNameArray",
+//   get: ({ get }) => {
+//     const { userList } = get(roomRepository);
+//     return Object.values(userList);
+//   },
+// });
 export const chatRepository = atom({
   key: "chatRepository",
   default: {},

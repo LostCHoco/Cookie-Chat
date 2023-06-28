@@ -7,7 +7,6 @@ import {
   toggleState,
   userState,
 } from "repository";
-import profile from "image/profile.png";
 import { socket } from "socket";
 export const Loading = () => {
   const [isLoad, setLoad] = useRecoilState(toggleState("loadData"));
@@ -26,7 +25,7 @@ export const Loading = () => {
             setUserState({
               uid: user.uid,
               name: user.displayName,
-              photo: user.photoURL ?? profile,
+              photo: user.photoURL ?? "",
             });
           }
           setUserLoad(true);
@@ -47,6 +46,7 @@ export const Loading = () => {
       setLoad(true);
     }
   });
+  //로딩창 렌더링
   return (
     <div className="loading flex">
       <h1> LOADING...</h1>

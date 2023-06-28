@@ -1,7 +1,9 @@
 export const signError = (e) => {
   let msg = "";
-  if (e.code.includes("email")) {
+  if (e.code.includes("invalid-email")) {
     msg = "이메일 형식으로 입력해주세요.";
+  } else if (e.code.includes("already")) {
+    msg = "이미 가입된 이메일입니다.";
   } else if (e.code.includes("weak")) {
     msg = "6자리 이상의 비밀번호를 입력해주세요.";
   } else {

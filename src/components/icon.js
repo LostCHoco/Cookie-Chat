@@ -3,6 +3,7 @@ import mail from "image/mail.png";
 import friend from "image/friend.png";
 import lock from "image/lock.png";
 import unlock from "image/unlock.png";
+import profile from "image/profile.png";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
@@ -32,7 +33,11 @@ export const Profile = ({ logout }) => {
   }
   return (
     <div className={profileClass}>
-      <img src={photo} alt="profile" onClick={toggleSetting} />
+      <img
+        src={photo !== "" ? photo : profile}
+        alt="profile"
+        onClick={toggleSetting}
+      />
       <div className="user_setting_box flex">
         <Setting />
         <Logout logout={logout} />
@@ -40,11 +45,10 @@ export const Profile = ({ logout }) => {
     </div>
   );
 };
-export const SubProfile = () => {
-  const { photo } = useRecoilValue(userState);
+export const SubProfile = ({ photo = "" }) => {
   return (
     <div className="sub_profile">
-      <img src={photo} alt="profile" />
+      <img src={photo !== "" ? photo : profile} alt="profile" />
     </div>
   );
 };

@@ -44,6 +44,7 @@ export const setID = (arr = []) => {
 };
 
 export const updateUserlist = (arr = [], newItem) => {
+  if (arr.includes(newItem)) return arr;
   const beforeSet = [];
   arr.forEach((item) => {
     beforeSet.push(item);

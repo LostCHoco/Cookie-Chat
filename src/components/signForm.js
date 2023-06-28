@@ -4,16 +4,20 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import { signError } from "../function/validation";
 import { useNavigate } from "react-router-dom";
 import auth from "auth";
 import { convertToKorean } from "function/function";
+import { useSetRecoilState } from "recoil";
+import { setNickname } from "repository";
 
 const SocialButton = ({ name, action }) => {
   const iconName = `xi-${name}`;
   const buttonName = `social ${name} flex`;
   const buttonText = convertToKorean(name);
+  //소셜미디어 로그인 버튼 컴포넌트
   return (
     <form>
       <button type="button" className={buttonName} onClick={action}>
@@ -30,6 +34,7 @@ const Input = ({ name, hook, type = "text" }) => {
   const key = useId();
   const [state, setState, error] = hook;
   const hasError = error === undefined ? false : true;
+  //텍스트 입력칸 컴포넌트
   return (
     <>
       {hasError ? (
@@ -49,6 +54,7 @@ const Input = ({ name, hook, type = "text" }) => {
     </>
   );
 };
+
 export const SignInForm = () => {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
@@ -69,17 +75,18 @@ export const SignInForm = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((result) => {
-        nav("/");
+        nav("/room");
       })
       .catch((error) => {
         console.log(error);
       });
   }
+  //로그인 컴포넌트
   return (
     <main>
       <form className="sign">
         <Input name="이메일" hook={[email, setEmail]} />
-        <Input name="비밀번호" hook={[pwd, setPwd]} />
+        <Input name="비밀번호" hook={[pwd, setPwd]} type="password" />
         <button type="button" onClick={login}>
           로그인
         </button>
@@ -99,6 +106,8 @@ export const SignUpForm = () => {
   const [pwdError, setPwdError] = useState("");
   const [pwd2Error, setPwd2Error] = useState("");
   const [nicknameError, setNicknameError] = useState("");
+  const updateNickname = useSetRecoilState(setNickname);
+  const nav = useNavigate();
 
   function checkEmpty(stateArray = [], name = "") {
     const [state, error] = stateArray;
@@ -141,12 +150,23 @@ export const SignUpForm = () => {
     createUserWithEmailAndPassword(auth, email, pwd)
       .then((userCredential) => {
         // Signed in
-        const user = userCredential.user;
-        console.log(user);
+        // const user = userCredential.user;
+        updateProfile(auth.currentUser, {
+          displayName: nickname,
+        })
+          .then(() => {
+            // Profile updated!
+            updateNickname(nickname);
+            nav("/");
+          })
+          .catch((e) => {
+            console.log(e);
+          });
         // ...
       })
       .catch((e) => {
         const msg = signError(e);
+        console.dir(e);
         if (msg.includes("이메일")) {
           setEmailError(msg);
         } else if (msg.includes("비밀번호")) {
@@ -157,11 +177,16 @@ export const SignUpForm = () => {
         }
       });
   }
+  //회원가입 컴포넌트
   return (
     <form className="sign">
       <Input name="이메일" hook={[email, setEmail, emailError]} />
-      <Input name="비밀번호" hook={[pwd, setPwd, pwdError]} />
-      <Input name="비밀번호 확인" hook={[pwd2, setPwd2, pwd2Error]} />
+      <Input name="비밀번호" hook={[pwd, setPwd, pwdError]} type="password" />
+      <Input
+        name="비밀번호 확인"
+        hook={[pwd2, setPwd2, pwd2Error]}
+        type="password"
+      />
       <Input name="닉네임" hook={[nickname, setName, nicknameError]} />
       <button type="button" onClick={signUp}>
         회원가입

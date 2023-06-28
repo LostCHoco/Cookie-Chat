@@ -6,17 +6,17 @@ import { SignInForm, SignUpForm } from "components/signForm";
 import homeStyle from "css/home.css";
 import roomStyle from "css/room.css";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userState, roomRepository } from "repository";
+import { useRecoilValue } from "recoil";
+import { userState, roomRepository, loginState } from "repository";
 import { socket } from "socket";
+import { useEffect } from "react";
 
-export const Home = () => {
+export const WaitingRoom = () => {
+  //대기방 렌더링
   return (
     <div id="body" style={homeStyle}>
       <Header />
-      <div className="container flex">
-        <Rooms />
-      </div>
+      <Rooms />
     </div>
   );
 };
@@ -32,21 +32,20 @@ export const Room = () => {
   /*방의 아이디가 서버에 존재하면 채팅방을 보여주고,
     서버에 없으면 NotFound 페이지를 보여줌*/
   const isRoom = ids.includes(id);
-  const setRooms = useSetRecoilState(roomRepository);
-  if (isRoom) {
-    socket.emit("enter-room", { id: id, user: user });
-    socket.off("update-room");
-    socket.on("update-room", (data) => {
-      setRooms(data);
-    });
-  }
+  const isLogin = useRecoilValue(loginState);
+  useEffect(() => {
+    if (isRoom) {
+      socket.emit("enter-room", { id: id, user: user });
+    }
+  }, [id, isRoom, user]);
   const room = rooms.find((element) => {
     return element.id === id;
   });
   const title = room !== undefined ? room.title : "No Title";
+  //채팅방 렌더링
   return (
     <div id="body" style={roomStyle}>
-      {isRoom ? (
+      {isRoom && isLogin ? (
         <>
           <Header title={title} />
           <div className="container flex">
@@ -61,14 +60,18 @@ export const Room = () => {
   );
 };
 
-export const SignIn = () => (
-  <>
-    <Header />
-    <SignInForm />
-  </>
-);
+export const SignIn = () => {
+  //로그인 렌더링
+  return (
+    <>
+      <Header />
+      <SignInForm />
+    </>
+  );
+};
 
 export const SignUp = () => (
+  //회원가입 렌더링
   <>
     <Header />
     <SignUpForm />
@@ -79,6 +82,7 @@ export const NotFound = () => {
   function goHome() {
     nav("/");
   }
+  //오류 페이지 렌더링
   return (
     <div className="error flex">
       <h1>페이지를 찾을 수 없습니다.</h1>

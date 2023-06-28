@@ -1,1 +1,1 @@
-# Cookie Chat React ver
+# Cookie Chat

@@ -3,13 +3,15 @@
 
 :root {
   --black: #333;
+  --semi-black: #666;
   --white: #fafafa;
   --semi-white: #eee;
   --gray: #aaa;
   --dark-gray: #999;
+  --dark-gray-active: #888;
 }
 
-:not(pre, input, textarea, p, span)::selection {
+:not(pre, input, textarea, p, span, b)::selection {
   background-color: inherit;
 }
 
@@ -72,8 +74,12 @@ header {
   padding: 0 20px;
   width: 100vw;
 }
+
 header img {
   width: 30px;
+}
+.header_logo img:hover {
+  filter: opacity(0.5);
 }
 header h2 {
   position: absolute;
@@ -103,6 +109,9 @@ header .login_btn:active {
 }
 .user_box img {
   cursor: pointer;
+}
+.user_box img:hover {
+  outline: 2px solid var(--black);
 }
 .user_box .profile {
   padding: 0;
@@ -148,10 +157,13 @@ aside h3 {
 aside :is(.joinroom, .login_user) {
   width: 170px;
   background-color: white;
-  border-radius: 5px;
-  padding: 10px 15px;
+  padding: 10px 0;
 }
-
+.login_user {
+  justify-content: flex-start;
+  gap: 15px;
+  cursor: default;
+}
 main {
   padding: 30px 40px;
 }
@@ -170,8 +182,7 @@ form input {
   height: 30px;
   font-size: 18px;
 }
-form button,
-.dark_btn {
+form button {
   margin-top: 30px;
   height: 35px;
   border-radius: 8px;
@@ -179,6 +190,9 @@ form button,
   background-color: var(--dark-gray);
   color: white;
   font-size: 16px;
+}
+form button:active {
+  background-color: var(--dark-gray-active);
 }
 form.sign {
   display: flex;
@@ -196,6 +210,9 @@ form.sign {
 }
 .google {
   background-color: lightcoral;
+}
+.google:active {
+  background-color: coral;
 }
 
 .label_box {
