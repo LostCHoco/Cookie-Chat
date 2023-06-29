@@ -16,7 +16,8 @@
     "socket.io-client": "^4.6.2"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"nodemon ./server/index.js\"",
+    "start": "react-scripts start",
+    "multi": "concurrently \"react-scripts start\" \"nodemon ./server/index.js\"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

@@ -8,6 +8,8 @@ import { userState, chatRepository } from "repository";
 
 const Output = ({ task }) => {
   const { user, photo, date, text } = task;
+  // const reg = /[http:|https:]\S+/g;
+  // const hyperTextArray = text.match(reg);
   //채팅 로그 컴포넌트 렌더링
   return (
     <div className="output">
@@ -74,6 +76,7 @@ const Input = ({ roomID }) => {
         placeholder="메세지 입력"
         value={content}
       ></textarea>
+      <i className="xi-send"></i>
     </div>
   );
 };

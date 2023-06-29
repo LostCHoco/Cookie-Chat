@@ -9,17 +9,17 @@ import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "repository";
 const Setting = () => (
+  // 설정 버튼 컴포넌트
   <Link to="/" className="button flex">
     설정
   </Link>
 );
-const Logout = ({ logout }) => {
-  return (
-    <button type="button" className="button" onClick={logout}>
-      로그아웃
-    </button>
-  );
-};
+const Logout = ({ logout }) => (
+  //로그아웃 버튼 컴포넌트
+  <button type="button" className="button" onClick={logout}>
+    로그아웃
+  </button>
+);
 
 export const Profile = ({ logout }) => {
   const { photo } = useRecoilValue(userState);
@@ -31,6 +31,7 @@ export const Profile = ({ logout }) => {
       setClass("profile");
     }
   }
+  //유저 프로필 컴포넌트 렌더링
   return (
     <div className={profileClass}>
       <img
@@ -45,14 +46,13 @@ export const Profile = ({ logout }) => {
     </div>
   );
 };
-export const SubProfile = ({ photo = "" }) => {
-  return (
-    <div className="sub_profile">
-      <img src={photo !== "" ? photo : profile} alt="profile" />
-    </div>
-  );
-};
-
+export const SubProfile = ({ photo = "" }) => (
+  //유저 아이콘 컴포넌트
+  <div className="sub_profile">
+    <img src={photo !== "" ? photo : profile} alt="profile" />
+  </div>
+);
+/* 각 아이콘 컨테이너 컴포넌트 */
 export const Search = () => {
   return (
     <div className="search">

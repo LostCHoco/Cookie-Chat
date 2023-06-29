@@ -45,8 +45,28 @@
   padding: 20px;
   font-size: 20px;
   resize: none;
+  position: relative;
 }
-
+i[class$="send"] {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
 .input textarea::placeholder {
   color: var(--gray);
+}
+
+@media (max-width: 768px) {
+  .chat_box,
+  .input textarea {
+    width: 90vw;
+  }
+  .input textarea {
+    font-size: 16px;
+    padding: 10px;
+  }
+  i[class$="send"] {
+    display: block;
+  }
 }

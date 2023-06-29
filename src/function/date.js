@@ -8,7 +8,8 @@ export function getFullTime() {
   const int_minute = now.getMinutes();
   const int_second = now.getSeconds();
   const isAfternoon = int_hour >= 12 ? true : false;
-  const hour = (int_hour % 12).toString().padStart(2, "0");
+  const hour =
+    int_hour === 0 ? "12" : (int_hour % 12).toString().padStart(2, "0");
   const minute = int_minute.toString().padStart(2, "0");
   const second = int_second.toString().padStart(2, "0");
   if (isAfternoon) {

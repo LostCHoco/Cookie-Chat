@@ -263,3 +263,12 @@ img[alt="profile"] {
   background-color: var(--dark-gray);
   color: white;
 }
+
+@media (max-width: 768px) {
+  aside {
+    display: none;
+  }
+  main {
+    padding: 40px 0 20px;
+  }
+}
