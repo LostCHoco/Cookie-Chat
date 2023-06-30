@@ -129,6 +129,7 @@ header .login_btn:active {
   scale: 0;
   transform-origin: 100px top;
   /* transition: scale 100ms; */
+  z-index: 1;
 }
 .user_box .profile.active .user_setting_box {
   scale: 1;
@@ -263,12 +264,54 @@ img[alt="profile"] {
   background-color: var(--dark-gray);
   color: white;
 }
-
+.room_password form {
+  gap: 20px;
+  padding: 40px;
+}
+.room_password input {
+  display: block;
+}
+.room_password button {
+  margin: 0;
+  padding: 0 20px;
+}
 @media (max-width: 768px) {
-  aside {
-    display: none;
+  header .login_btn {
+    width: 80px;
+    font-size: 13px;
+    padding: 5px 0;
+    margin-right: 0;
   }
   main {
-    padding: 40px 0 20px;
+    padding: 20px 0 0;
+  }
+  .loading i {
+    font-size: 90vw;
+  }
+  .loading h1 {
+    font-size: 9vw;
+  }
+  .error h1 {
+    font-size: 6vw;
+  }
+  .error button {
+    width: 80vw;
+    height: 50px;
+  }
+
+  form {
+    width: 90vw;
+  }
+  .room_password form {
+    padding-top: 20px;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .room_password input {
+    display: block;
+  }
+  .room_password button {
+    width: 90%;
+    margin-top: 20px;
   }
 }

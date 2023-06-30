@@ -8,8 +8,7 @@ import {
   useSetRecoilState,
 } from "recoil";
 import { SignIn, SignUp, Room, NotFound, WaitingRoom } from "view";
-import Test from "test";
-import "./css/common.css";
+// import "./css/common.css";
 import { loginState, roomRepository, toggleState } from "repository";
 import { Loading } from "components/loading";
 import { socket } from "socket";
@@ -23,7 +22,6 @@ const Router = () => {
         <Route path="/signup" element={<SignUp />} />
         <Route path="/room" element={<WaitingRoom />} />
         <Route path="/room/:id" element={<Room />} />
-        <Route path="/test" element={<Test />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
@@ -31,7 +29,6 @@ const Router = () => {
 };
 
 const App = () => {
-  console.log("app");
   const [isLoad, setLoad] = useRecoilState(toggleState("loadData"));
   const setRoomData = useSetRecoilState(roomRepository);
   socket.off("update-room");
@@ -42,7 +39,6 @@ const App = () => {
   socket.on("disconnect", () => {
     setLoad(false);
   });
-
   return isLoad ? <Router /> : <Loading />;
 };
 

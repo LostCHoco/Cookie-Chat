@@ -33,6 +33,7 @@ export const Loading = () => {
         });
       }
       if (!isServerLoad) {
+        socket.emit("req-initialize");
         socket.on("initialize", ([roomData, chatData]) => {
           initRoom(roomData);
           initChat(chatData);

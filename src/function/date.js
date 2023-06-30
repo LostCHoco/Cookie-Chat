@@ -18,14 +18,3 @@ export function getFullTime() {
     return `오전 ${hour}:${minute}:${second}`;
   }
 }
-
-const setExpire = (second = 0) => {
-  const time = second * 1000;
-  const now = new Date().getTime();
-  const utc = new Date(now + time).toUTCString();
-  return utc;
-};
-
-export const setCookie = (key, name, expire = 0) => {
-  window.document.cookie = `${key}=${name}; expires=${setExpire(expire)}`;
-};

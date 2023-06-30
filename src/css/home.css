@@ -10,7 +10,7 @@ i.icon_button {
   font-weight: bold;
   cursor: pointer;
 }
-i.icon_button:hover {
+i.icon_button:active {
   color: var(--dark-gray);
 }
 
@@ -123,7 +123,7 @@ i[class*="plus"] {
   width: 20px;
   cursor: pointer;
 }
-.input_box.count .number_controller {
+.number_controller {
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
@@ -149,7 +149,51 @@ i[class*="plus"] {
     grid-template-columns: 1fr;
     gap: 20px;
   }
+  .room_controller,
   .room_entrance {
-    width: calc(100vw - 280px);
+    width: calc(90vw);
+  }
+}
+@media (max-width: 550px) {
+  .room_entrance {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .room_entrance h1 {
+    font-size: 24px;
+  }
+  .room_entrance .meta {
+    gap: 62vw;
+  }
+  .room_entrance .meta .lock {
+    margin: 0;
+  }
+  .lock img {
+    height: 20px;
+  }
+  .create_setting {
+    width: 90vw;
+  }
+  .input_box {
+    display: block;
+  }
+  .input_box.password {
+    position: relative;
+  }
+  .input_box input:not([type="checkbox"]) {
+    width: calc(90vw - 60px);
+    margin-top: 5px;
+  }
+  .input_box input[type="checkbox"] {
+    position: absolute;
+    top: 0px;
+  }
+  .input_box.count {
+    display: flex;
+    justify-content: space-between;
+  }
+  .number_controller {
+    position: static;
+    transform: none;
   }
 }

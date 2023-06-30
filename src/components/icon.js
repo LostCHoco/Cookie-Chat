@@ -4,16 +4,16 @@ import friend from "image/friend.png";
 import lock from "image/lock.png";
 import unlock from "image/unlock.png";
 import profile from "image/profile.png";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "repository";
-const Setting = () => (
-  // 설정 버튼 컴포넌트
-  <Link to="/" className="button flex">
-    설정
-  </Link>
-);
+// const Setting = () => (
+//   // 설정 버튼 컴포넌트
+//   <Link to="/" className="button flex">
+//     설정
+//   </Link>
+// );
 const Logout = ({ logout }) => (
   //로그아웃 버튼 컴포넌트
   <button type="button" className="button" onClick={logout}>
@@ -40,7 +40,7 @@ export const Profile = ({ logout }) => {
         onClick={toggleSetting}
       />
       <div className="user_setting_box flex">
-        <Setting />
+        {/* <Setting /> */}
         <Logout logout={logout} />
       </div>
     </div>

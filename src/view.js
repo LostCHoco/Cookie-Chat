@@ -10,6 +10,7 @@ import { useRecoilValue } from "recoil";
 import { userState, roomRepository, loginState } from "repository";
 import { socket } from "socket";
 import { useEffect } from "react";
+import { RoomPwd } from "components/password";
 
 export const WaitingRoom = () => {
   //대기방 렌더링
@@ -30,17 +31,24 @@ export const Room = () => {
     ids.push(room.id);
   });
   /*방의 아이디가 서버에 존재하면 채팅방을 보여주고,
-    서버에 없으면 NotFound 페이지를 보여줌*/
+  서버에 없으면 NotFound 페이지를 보여줌*/
   const isRoom = ids.includes(id);
   const isLogin = useRecoilValue(loginState);
   useEffect(() => {
-    if (isRoom) {
+    if (isRoom && isLogin) {
       socket.emit("enter-room", { id: id, user: user });
     }
-  }, [id, isRoom, user]);
+  }, [id, isLogin, isRoom, user]);
   const room = rooms.find((element) => {
     return element.id === id;
   });
+
+  let roomLogin = false;
+  if (room !== undefined) {
+    if (room.userList[user.uid] !== undefined) {
+      roomLogin = room.userList[user.uid].isLogin;
+    }
+  }
   const title = room !== undefined ? room.title : "No Title";
   //채팅방 렌더링
   return (
@@ -48,10 +56,14 @@ export const Room = () => {
       {isRoom && isLogin ? (
         <>
           <Header title={title} />
-          <div className="container flex">
-            <Aside />
-            <Chatbox />
-          </div>
+          {roomLogin ? (
+            <div className="container flex">
+              <Aside />
+              <Chatbox />
+            </div>
+          ) : (
+            <RoomPwd />
+          )}
         </>
       ) : (
         <NotFound />

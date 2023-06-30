@@ -32,23 +32,29 @@ const Input = ({ roomID }) => {
   const [content, setContent] = useState("");
   const { name, photo } = useRecoilValue(userState);
 
+  function sendTextData() {
+    const data = {
+      id: roomID,
+      user: name,
+      photo: photo,
+      date: getFullTime(),
+      text: content,
+    };
+    socket.emit("chat-request", data);
+    setContent("");
+    setRow(1);
+    setSendState(true);
+    const chatBox = document.querySelector(".output_box");
+    const height = chatBox.scrollHeight;
+    chatBox.scrollTop = height;
+  }
   function sendMsg(e) {
-    const text = e.target.value;
-    if (e.keyCode === 13 && e.shiftKey === false && text !== "") {
-      const data = {
-        id: roomID,
-        user: name,
-        photo: photo,
-        date: getFullTime(),
-        text: text,
-      };
-      socket.emit("chat-request", data);
-      setContent("");
-      setRow(1);
-      setSendState(true);
-      const chatBox = document.querySelector(".output_box");
-      const height = chatBox.scrollHeight;
-      chatBox.scrollTop = height;
+    if (
+      (e.keyCode === 13 || e.type === "touchend") &&
+      e.shiftKey === false &&
+      content !== ""
+    ) {
+      sendTextData();
     } else if (e.keyCode === 27) {
       setContent("");
       setRow(1);
@@ -69,20 +75,23 @@ const Input = ({ roomID }) => {
       <textarea
         rows={row}
         onKeyDown={sendMsg}
-        onChange={checkSendState}
         onFocus={() => setRow(7)}
         onBlur={() => setRow(1)}
         type="text"
         placeholder="메세지 입력"
+        onChange={checkSendState}
         value={content}
       ></textarea>
-      <i className="xi-send"></i>
+      <div className="send_container flex" onTouchEnd={sendMsg}>
+        <i className="xi-send"></i>
+      </div>
     </div>
   );
 };
 
 const OutputBox = ({ roomID }) => {
   const [chatData, setChatData] = useRecoilState(chatRepository);
+
   socket.off("chat-response");
   socket.on("chat-response", (data) => {
     setChatData(data);

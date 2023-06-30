@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Lock, Unlock } from "./icon";
 import { socket } from "socket";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { getRoomsLength, roomRepository } from "repository";
+import { getRoomsLength, roomRepository, userState } from "repository";
 import { limitNumber } from "function/function";
 
 export const RoomEntrance = ({
@@ -18,14 +18,11 @@ export const RoomEntrance = ({
   return (
     <Link to={url} className="room_entrance flex">
       <h1>{title}</h1>
-      <div className="meta_Box">
-        <div className="meta flex">
-          <h3>
-            {current} / {max}
-          </h3>
-          {isLock ? <Lock /> : <Unlock />}
-        </div>
-        {/* <div className="profile_box flex"></div> */}
+      <div className="meta flex">
+        <h3>
+          {current} / {max}
+        </h3>
+        {isLock ? <Lock /> : <Unlock />}
       </div>
     </Link>
   );
@@ -87,6 +84,7 @@ const RoomtCreateSetting = ({ func }) => {
   const [number, setNumber] = useState(8);
   const titleRef = useRef();
   const nav = useNavigate();
+  const user = useRecoilValue(userState);
   function changeLockState() {
     if (isChecked) {
       setChecked(false);
@@ -109,13 +107,24 @@ const RoomtCreateSetting = ({ func }) => {
     });
   }
   function requestNewRoom() {
+    const myInfo = {};
+    Object.defineProperty(myInfo, user.uid, {
+      value: {
+        name: user.name,
+        photo: user.photo,
+        isLogin: true,
+      },
+      configurable: true,
+      enumerable: true,
+      writable: true,
+    });
     const roomData = {
       id: -1,
       title: titleRef.current.value,
       password: pwd,
       current: 0,
       max: number,
-      userList: {},
+      userList: myInfo,
     };
     socket.emit("newRoom", roomData);
     func();
@@ -223,7 +232,7 @@ const Rooms = () => {
         func={setActiveState}
         gridFunc={setGridNum}
         current={gridNum}
-        max={quotient}
+        max={quotient === 0 ? 1 : quotient}
       />
       {isActive && <RoomtCreateSetting func={setActiveState} />}
     </main>

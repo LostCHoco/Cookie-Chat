@@ -37,6 +37,7 @@ const Header = ({ title = "쿠키챗" }) => {
     setUserState(defaultState);
     nav("/");
   }
+
   //헤더 컴포넌트 렌더링
   return (
     <header>

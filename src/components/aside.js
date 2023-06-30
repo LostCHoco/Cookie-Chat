@@ -11,15 +11,18 @@ const LoginUser = ({ name, photo }) => (
   </div>
 );
 
-const LoginUsers = ({ userList }) => (
-  //참여유저 컨테이너 컴포넌트 렌더링
-  <div className="login_users">
-    <h3>접속 유저</h3>
-    {userList.map((user, idx) => (
-      <LoginUser key={idx} name={user.name} photo={user.photo} />
-    ))}
-  </div>
-);
+const LoginUsers = ({ userList }) => {
+  const checkList = userList.filter((item) => item.isLogin === true);
+  return (
+    //참여유저 컨테이너 컴포넌트 렌더링
+    <div className="login_users">
+      <h3>접속 유저</h3>
+      {checkList.map((user, idx) => (
+        <LoginUser key={idx} name={user.name} photo={user.photo} />
+      ))}
+    </div>
+  );
+};
 
 const Aside = () => {
   const { id } = useParams();
