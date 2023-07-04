@@ -27,6 +27,7 @@ i.icon_button:active {
   border-radius: 5px;
   padding: 10px 20px;
   align-items: center;
+  position: relative;
 }
 .room_entrance:hover {
   outline: 3px solid var(--black);
@@ -40,10 +41,11 @@ i.icon_button:active {
   align-items: center;
 }
 
-.lock,
-.unlock {
+.lock_prop {
+  /* margin-left: 20px;
+  margin-bottom: 14px; */
+  font-size: 30px;
   margin-left: 20px;
-  margin-bottom: 14px;
 }
 
 .profile_box {
@@ -123,6 +125,12 @@ i[class*="plus"] {
   width: 20px;
   cursor: pointer;
 }
+.error_msg.over_capacity {
+  margin: 10px 20px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 .number_controller {
   position: absolute;
   left: 50%;
@@ -168,8 +176,11 @@ i[class*="plus"] {
   .room_entrance .meta .lock {
     margin: 0;
   }
-  .lock img {
-    height: 20px;
+  .lock_prop {
+    margin: 0;
+  }
+  .lock_prop svg {
+    font-size: 20px;
   }
   .create_setting {
     width: 90vw;
@@ -195,5 +206,10 @@ i[class*="plus"] {
   .number_controller {
     position: static;
     transform: none;
+  }
+  .error_msg.over_capacity {
+    top: initial;
+    left: calc(50% - 80px);
+    bottom: 15px;
   }
 }

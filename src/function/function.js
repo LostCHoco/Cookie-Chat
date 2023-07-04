@@ -28,6 +28,21 @@ export const convertToKorean = (prev) => {
   if (dictionary[value] !== undefined) {
     return dictionary[value];
   } else {
-    return "";
+    return prev;
   }
+};
+
+export const toScrollBottom = (query = ".output_box") => {
+  const dom = document.querySelector(query);
+  const height = dom.scrollHeight;
+  dom.scrollTop = height;
+};
+
+export const pushInObject = (object, key, value) => {
+  Object.defineProperty(object, key, {
+    value: value,
+    configurable: true,
+    enumerable: true,
+    writable: true,
+  });
 };

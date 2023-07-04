@@ -7,6 +7,7 @@ import { socket } from "socket";
 export const RoomPwd = () => {
   const { id } = useParams();
   const [pwd, setPwd] = useState("");
+  const [error, setError] = useState(false);
   const user = useRecoilValue(userState);
   const rooms = useRecoilValue(roomRepository);
   const room = rooms.find((element) => {
@@ -15,6 +16,10 @@ export const RoomPwd = () => {
   function checkPwd() {
     if (pwd === room.password) {
       socket.emit("pass-login", [id, user.uid]);
+    } else {
+      setError(true);
+      const input = document.querySelector("input");
+      input.focus();
     }
   }
   return (
@@ -26,6 +31,7 @@ export const RoomPwd = () => {
           value={pwd}
           onChange={(e) => setPwd(e.target.value)}
         />
+        {error && <p className="error_msg">비밀번호가 다릅니다.</p>}
         <button type="button" onClick={checkPwd}>
           입력
         </button>

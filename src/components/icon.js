@@ -1,8 +1,7 @@
 import search from "image/search.png";
 import mail from "image/mail.png";
 import friend from "image/friend.png";
-import lock from "image/lock.png";
-import unlock from "image/unlock.png";
+import { BiSolidLockAlt, BiSolidLockOpenAlt } from "react-icons/bi";
 import profile from "image/profile.png";
 // import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -79,16 +78,18 @@ export const Friend = () => {
 
 export const Lock = () => {
   return (
-    <div className="lock">
-      <img src={lock} alt="lock" />
+    <div className="lock lock_prop">
+      {/* <img src={lock} alt="lock" /> */}
+      <BiSolidLockAlt />
     </div>
   );
 };
 
 export const Unlock = () => {
   return (
-    <div className="unlock">
-      <img src={unlock} alt="unlock" />
+    <div className="unlock lock_prop">
+      {/* <img src={unlock} alt="unlock" /> */}
+      <BiSolidLockOpenAlt />
     </div>
   );
 };

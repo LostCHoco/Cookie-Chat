@@ -4,7 +4,7 @@ import { Lock, Unlock } from "./icon";
 import { socket } from "socket";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { getRoomsLength, roomRepository, userState } from "repository";
-import { limitNumber } from "function/function";
+import { limitNumber, pushInObject } from "function/function";
 
 export const RoomEntrance = ({
   id = "",
@@ -13,10 +13,19 @@ export const RoomEntrance = ({
   title = "No Title",
   isLock = false,
 }) => {
+  const [isError, setError] = useState(false);
   const url = `/room/${id}`;
+  function enterWithMax(e) {
+    e.preventDefault();
+    if (current < max) {
+      e.defaultPrevented = false;
+    } else {
+      setError(true);
+    }
+  }
   // 입장 할 채팅방 컴포넌트
   return (
-    <Link to={url} className="room_entrance flex">
+    <Link to={url} className="room_entrance flex" onClick={enterWithMax}>
       <h1>{title}</h1>
       <div className="meta flex">
         <h3>
@@ -24,6 +33,11 @@ export const RoomEntrance = ({
         </h3>
         {isLock ? <Lock /> : <Unlock />}
       </div>
+      {isError && (
+        <div>
+          <p className="error_msg over_capacity">방이 가득 찼습니다. </p>
+        </div>
+      )}
     </Link>
   );
 };
@@ -108,19 +122,15 @@ const RoomtCreateSetting = ({ func }) => {
   }
   function requestNewRoom() {
     const myInfo = {};
-    Object.defineProperty(myInfo, user.uid, {
-      value: {
-        name: user.name,
-        photo: user.photo,
-        isLogin: true,
-      },
-      configurable: true,
-      enumerable: true,
-      writable: true,
+    pushInObject(myInfo, user.uid, {
+      name: user.name,
+      photo: user.photo,
+      isLogin: true,
     });
+    const title = titleRef.current.value;
     const roomData = {
       id: -1,
-      title: titleRef.current.value,
+      title: title === "" ? "No Title" : title,
       password: pwd,
       current: 0,
       max: number,
@@ -149,6 +159,7 @@ const RoomtCreateSetting = ({ func }) => {
             value={pwd}
             onChange={changePwd}
             disabled={isLock}
+            required
           />
           <input
             type="checkbox"

@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { getFullTime } from "../function/date";
 import { SubProfile } from "./icon";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { socket } from "socket";
 import { useParams } from "react-router-dom";
 import { userState, chatRepository } from "repository";
+import { toScrollBottom } from "function/function";
 
 const Output = ({ task }) => {
   const { user, photo, date, text } = task;
@@ -41,48 +42,55 @@ const Input = ({ roomID }) => {
       text: content,
     };
     socket.emit("chat-request", data);
-    setContent("");
-    setRow(1);
+    // setRow(1);
     setSendState(true);
-    const chatBox = document.querySelector(".output_box");
-    const height = chatBox.scrollHeight;
-    chatBox.scrollTop = height;
+    toScrollBottom();
   }
   function sendMsg(e) {
     if (
-      (e.keyCode === 13 || e.type === "touchend") &&
+      (e.keyCode === 13 || e.type === "touchend" || e.type === "click") &&
       e.shiftKey === false &&
       content !== ""
     ) {
       sendTextData();
     } else if (e.keyCode === 27) {
       setContent("");
-      setRow(1);
+      // setRow(1);
     } else {
-      setRow(7);
+      // setRow(7);
     }
   }
-  function checkSendState(e) {
-    setContent(e.target.value);
+  function clickEvent(e) {
+    if (content === "") return false;
+    sendMsg(e);
+  }
+  useEffect(() => {
     if (isSend) {
       setContent("");
       setSendState(false);
     }
-  }
+  }, [content, isSend]);
   //채팅 입력칸 컴포넌트 렌더링
   return (
-    <div className="input">
+    <div className="input flex">
       <textarea
         rows={row}
         onKeyDown={sendMsg}
-        onFocus={() => setRow(7)}
-        onBlur={() => setRow(1)}
+        // onFocus={() => setRow(7)}
+        // onBlur={(e) => {
+        //   console.dir(e);
+        //   setRow(1);
+        // }}
         type="text"
         placeholder="메세지 입력"
-        onChange={checkSendState}
+        onChange={(e) => setContent(e.target.value)}
         value={content}
       ></textarea>
-      <div className="send_container flex" onTouchEnd={sendMsg}>
+      <div
+        className="send_container flex"
+        onTouchEnd={(e) => clickEvent(e)}
+        onClick={(e) => clickEvent(e)}
+      >
         <i className="xi-send"></i>
       </div>
     </div>
@@ -91,7 +99,7 @@ const Input = ({ roomID }) => {
 
 const OutputBox = ({ roomID }) => {
   const [chatData, setChatData] = useRecoilState(chatRepository);
-
+  const [btnClass, setBtnClass] = useState("new_msg flex invisible");
   socket.off("chat-response");
   socket.on("chat-response", (data) => {
     setChatData(data);
@@ -99,10 +107,35 @@ const OutputBox = ({ roomID }) => {
   const tasks = chatData[roomID] ?? [];
   //채팅 로그 컨테이너 컴포넌트 렌더링
   return (
-    <div className="output_box">
+    <div
+      className="output_box"
+      onLoad={(e) => {
+        toScrollBottom();
+      }}
+      onScroll={(e) => {
+        const top = e.target.scrollTop;
+        const height = e.target.scrollHeight;
+        const cHeight = e.target.clientHeight;
+        const isBottom = height - top - cHeight < 1;
+        if (!isBottom) {
+          setBtnClass("new_msg flex");
+        } else {
+          setBtnClass("new_msg flex invisible");
+        }
+      }}
+    >
       {tasks.map((task, index) => {
         return <Output task={task} key={index} />;
       })}
+      <div
+        className={btnClass}
+        onClick={() => {
+          toScrollBottom();
+          setBtnClass("new_msg flex invisible");
+        }}
+      >
+        <i className="xi-arrow-down"></i>
+      </div>
     </div>
   );
 };
