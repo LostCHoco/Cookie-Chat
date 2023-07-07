@@ -198,7 +198,7 @@ const RoomtCreateSetting = ({ func }) => {
           <button type="button" onClick={requestNewRoom}>
             생성
           </button>
-          <button type="button" onClick={func}>
+          <button type="button" onClick={() => func()}>
             취소
           </button>
         </div>
