@@ -38,7 +38,27 @@
 
 ## 주요 기능
 
-<details><summary>CSS</summary>
+<details><summary>웹 렌더링</summary>
+<p>
+
+</p>
+</details>
+<details><summary>회원가입 및 로그인</summary>
+<p>
+
+</p>
+</details>
+<details><summary>채팅방 생성</summary>
+<p>
+
+</p>
+</details>
+<details><summary>채팅창</summary>
+<p>
+
+</p>
+</details>
+<details><summary>그 외</summary>
 <p>
 
 </p>
