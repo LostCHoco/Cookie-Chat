@@ -4,7 +4,12 @@ import { Lock, Unlock } from "./icon";
 import { socket } from "socket";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { getRoomsLength, roomRepository, userState } from "repository";
-import { limitNumber, pushInObject } from "function/function";
+import {
+  callPathname,
+  limitNumber,
+  pushInObject,
+  trueOrFalse,
+} from "function/function";
 
 export const RoomEntrance = ({
   id = "",
@@ -15,9 +20,17 @@ export const RoomEntrance = ({
 }) => {
   const [isError, setError] = useState(false);
   const url = `/room/${id}`;
+  const rooms = useRecoilValue(roomRepository);
+  const myInfo = useRecoilValue(userState);
   function enterWithMax(e) {
     e.preventDefault();
-    if (current < max) {
+    const path = callPathname(e.target).pathname;
+    const [room] = rooms.filter(($room) => path.includes($room.id));
+    let isJoin = false;
+    if (room.userList[myInfo.uid] !== undefined) {
+      if (room.userList[myInfo.uid].isLogin) isJoin = true;
+    }
+    if (current < max || isJoin) {
       e.defaultPrevented = false;
     } else {
       setError(true);
@@ -185,12 +198,7 @@ const RoomtCreateSetting = ({ func }) => {
           <button type="button" onClick={requestNewRoom}>
             생성
           </button>
-          <button
-            type="button"
-            onClick={() => {
-              func();
-            }}
-          >
+          <button type="button" onClick={func}>
             취소
           </button>
         </div>
@@ -214,11 +222,9 @@ const Rooms = () => {
     setRooms(data);
   });
   function setActiveState(state = false) {
-    if (state) {
-      setActive(true);
-    } else {
-      setActive(false);
-    }
+    trueOrFalse(state, (bool) => {
+      setActive(bool);
+    });
   }
   //대기방 전체 렌더링
   return (

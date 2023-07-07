@@ -17,36 +17,45 @@ export const Loading = () => {
   const initChat = useSetRecoilState(chatRepository);
   const [userText, setUserText] = useState("loading user data");
   const [serverText, setServerText] = useState("loading server data");
+ 
   useEffect(() => {
     if (!isLoad) {
-      if (!isUserLoad) {
-        auth.onAuthStateChanged((user) => {
-          if (user) {
-            setUserState({
-              uid: user.uid,
-              name: user.displayName,
-              photo: user.photoURL ?? "",
-            });
-          }
-          setUserLoad(true);
-          setUserText("complete");
-        });
-      }
-      if (!isServerLoad) {
-        socket.emit("req-initialize");
-        socket.on("initialize", ([roomData, chatData]) => {
-          initRoom(roomData);
-          initChat(chatData);
-          setServerLoad(true);
-          setServerText("complete");
-          socket.off("initialize");
-        });
-      }
+      userLoad();
+      serverLoad();
     }
     if (isServerLoad && isUserLoad) {
       setLoad(true);
     }
   });
+
+  function userLoad(){
+    if (!isUserLoad) {
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          setUserState({
+            uid: user.uid,
+            name: user.displayName,
+            photo: user.photoURL ?? "",
+          });
+        }
+        setUserLoad(true);
+        setUserText("complete");
+      });
+    }
+  }
+  function serverLoad(){
+    if (!isServerLoad) {
+      socket.emit("req-initialize");
+      socket.on("initialize", ([roomData, chatData]) => {
+        initRoom(roomData);
+        initChat(chatData);
+        setServerLoad(true);
+        setServerText("complete");
+        socket.off("initialize");
+      });
+    }
+  }
+  
   //로딩창 렌더링
   return (
     <div className="loading flex">

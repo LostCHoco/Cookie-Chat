@@ -46,3 +46,20 @@ export const pushInObject = (object, key, value) => {
     writable: true,
   });
 };
+
+export const trueOrFalse = (condition = true, callback, reverse = false) => {
+  let con = reverse ? false : true;
+  if (condition) {
+    callback(con);
+  } else {
+    callback(!con);
+  }
+};
+
+export const callPathname = (value) => {
+  if (value.pathname === undefined) {
+    value = value.parentNode;
+    value = callPathname(value);
+  }
+  return value;
+};

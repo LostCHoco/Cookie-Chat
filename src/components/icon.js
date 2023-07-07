@@ -1,15 +1,12 @@
-import search from "image/search.png";
-import mail from "image/mail.png";
-import friend from "image/friend.png";
 import { BiSolidLockAlt, BiSolidLockOpenAlt } from "react-icons/bi";
-import profile from "image/profile.png";
+// import { MdEmail, MdOutlinePeopleAlt, MdOutlineSearch } from "react-icons/md";
 // import { Link } from "react-router-dom";
 import { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { userState } from "repository";
-// const Setting = () => (
+// const SettingButton = () => (
 //   // 설정 버튼 컴포넌트
-//   <Link to="/" className="button flex">
+//   <Link to="/user" className="button flex">
 //     설정
 //   </Link>
 // );
@@ -33,13 +30,18 @@ export const Profile = ({ logout }) => {
   //유저 프로필 컴포넌트 렌더링
   return (
     <div className={profileClass}>
-      <img
+      {photo !== "" ? (
+        <img src={photo} alt="profile" onClick={toggleSetting} />
+      ) : (
+        <i className="xi-profile" onClick={toggleSetting}></i>
+      )}
+      {/* <img
         src={photo !== "" ? photo : profile}
         alt="profile"
         onClick={toggleSetting}
-      />
+      /> */}
       <div className="user_setting_box flex">
-        {/* <Setting /> */}
+        {/* <SettingButton /> */}
         <Logout logout={logout} />
       </div>
     </div>
@@ -48,38 +50,41 @@ export const Profile = ({ logout }) => {
 export const SubProfile = ({ photo = "" }) => (
   //유저 아이콘 컴포넌트
   <div className="sub_profile">
-    <img src={photo !== "" ? photo : profile} alt="profile" />
+    {photo !== "" ? (
+      <img src={photo} alt="profile" />
+    ) : (
+      <i className="xi-profile"></i>
+    )}
   </div>
 );
 /* 각 아이콘 컨테이너 컴포넌트 */
-export const Search = () => {
-  return (
-    <div className="search">
-      <img src={search} alt="search" />
-    </div>
-  );
-};
+// export const Search = () => {
+//   return (
+//     <div className="search">
+//       <MdOutlineSearch/>
+//     </div>
+//   );
+// };
 
-export const Mail = () => {
-  return (
-    <div className="mail">
-      <img src={mail} alt="mail" />
-    </div>
-  );
-};
+// export const Mail = () => {
+//   return (
+//     <div className="mail">
+//       <MdEmail/>
+//     </div>
+//   );
+// };
 
-export const Friend = () => {
-  return (
-    <div className="friend">
-      <img src={friend} alt="friend" />
-    </div>
-  );
-};
+// export const Friend = () => {
+//   return (
+//     <div className="friend">
+//       <MdOutlinePeopleAlt/>
+//     </div>
+//   );
+// };
 
 export const Lock = () => {
   return (
     <div className="lock lock_prop">
-      {/* <img src={lock} alt="lock" /> */}
       <BiSolidLockAlt />
     </div>
   );
@@ -88,7 +93,6 @@ export const Lock = () => {
 export const Unlock = () => {
   return (
     <div className="unlock lock_prop">
-      {/* <img src={unlock} alt="unlock" /> */}
       <BiSolidLockOpenAlt />
     </div>
   );

@@ -2,17 +2,38 @@
 @import url(//cdn.jsdelivr.net/npm/xeicon@2.3.3/xeicon.min.css);
 
 :root {
+  --real-black: #000;
   --black: #333;
   --semi-black: #666;
-  --white: #fafafa;
-  --semi-white: #eee;
-  --semi-white-active: #ddd;
-  --gray: #aaa;
-  --dark-gray: #999;
   --dark-gray-active: #888;
+  --dark-gray: #999;
+  --gray: #aaa;
+  --semi-white-active: #ddd;
+  --semi-white: #eee;
+  --white: #f8f8f8;
+  --real-white: #fff;
+  --shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  --hyperlink: mediumblue;
+  --hyperlink-hover: goldenrod;
+  --hyperlink-active: crimson;
 }
-
-:not(pre, input, textarea, p, span, b)::selection {
+[data-darkmode="true"] * {
+  --real-black: #fff;
+  --black: #f8f8f8;
+  --semi-black: #eee;
+  --dark-gray-active: #bbb;
+  --dark-gray: #aaa;
+  --gray: #999;
+  --semi-white-active: #777;
+  --semi-white: #666;
+  --white: #333;
+  --real-white: #000;
+  --shadow: 0 0 5px 3px rgba(255, 255, 255, 0.5);
+  --hyperlink: aqua;
+  --hyperlink-hover: yellow;
+  --hyperlink-active: red;
+}
+:not(pre, input, textarea, p, span, b, p a)::selection {
   background-color: inherit;
 }
 
@@ -34,11 +55,11 @@ a,
 button {
   cursor: pointer;
 }
-
 img {
   display: block;
 }
 body {
+  background-color: var(--real-white);
   color: var(--black);
   font-family: "Inter", sans-serif;
   font-size: 16px;
@@ -48,8 +69,11 @@ pre,
 textarea {
   font-family: "Inter", sans-serif;
   cursor: text;
+  color: var(--black);
 }
-
+input:disabled {
+  background-color: var(--gray);
+}
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
@@ -82,6 +106,9 @@ header {
 header img {
   width: 30px;
 }
+.header_logo {
+  font-size: 30px;
+}
 .header_logo img:hover {
   filter: opacity(0.5);
 }
@@ -90,6 +117,15 @@ header h2 {
   left: 50%;
   transform: translateX(-50%);
   cursor: default;
+}
+header .darkmode {
+  background-color: var(--white);
+  margin-left: auto;
+  margin-right: 20px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  border: 2px solid var(--black);
+  color: var(--black);
 }
 header .login_btn {
   display: block;
@@ -103,7 +139,7 @@ header .login_btn {
   cursor: pointer;
   margin-right: 20px;
 }
-header .login_btn:active {
+header .login_btn:is(:hover, :active) {
   background-color: var(--semi-white);
 }
 
@@ -111,7 +147,7 @@ header .login_btn:active {
   align-items: flex-end;
   gap: 20px;
 }
-.user_box img {
+.user_box :is(img, .profile i) {
   cursor: pointer;
 }
 .user_box img:hover {
@@ -120,6 +156,12 @@ header .login_btn:active {
 .user_box .profile {
   padding: 0;
   position: relative;
+}
+i[class="xi-profile"] {
+  font-size: 30px;
+  border-radius: 100%;
+  background-color: var(--black);
+  color: var(--white);
 }
 .user_setting_box {
   width: 140px;
@@ -132,7 +174,6 @@ header .login_btn:active {
   gap: 20px;
   scale: 0;
   transform-origin: 100px top;
-  /* transition: scale 100ms; */
   z-index: 1;
 }
 .user_box .profile.active .user_setting_box {
@@ -145,6 +186,7 @@ header .login_btn:active {
   background-color: var(--semi-white);
   border-radius: 5px;
   border: none;
+  color: var(--black);
 }
 aside {
   background-color: var(--semi-white);
@@ -161,7 +203,7 @@ aside h3 {
 }
 aside :is(.joinroom, .login_user) {
   width: 170px;
-  background-color: white;
+  background-color: var(--white);
   padding: 10px 0;
 }
 .login_user {
@@ -172,9 +214,56 @@ aside :is(.joinroom, .login_user) {
 main {
   padding: 30px 40px;
 }
-
-form {
+main.home {
+  margin-top: 30px;
+}
+main.home h2 {
+  margin: 30px;
+  cursor: default;
+}
+main.home button {
+  width: 100%;
   background-color: var(--white);
+  color: var(--black);
+  border: 1px solid var(--black);
+  border-radius: 5px;
+  padding: 10px;
+}
+main.home button:is(:hover, :active) {
+  background-color: var(--semi-white);
+}
+footer {
+  position: fixed;
+  bottom: 0;
+}
+footer h3 {
+  text-align: center;
+  cursor: default;
+}
+footer .address_box {
+  width: 100vw;
+  gap: 20px;
+  padding: 20px 30px 50px;
+}
+footer .address {
+  gap: 5px;
+}
+section {
+  flex-direction: column;
+  gap: 20px;
+}
+section h3 {
+  margin-top: 15px;
+}
+section :is(input, button) {
+  width: 250px;
+}
+section .error_msg {
+  margin: 0;
+}
+form,
+section {
+  background-color: var(--semi-white);
   width: 500px;
   margin: 30px auto;
   padding: 10px 25px 30px;
@@ -183,11 +272,11 @@ form {
 form label {
   margin: 20px 10px;
 }
-form input {
+:is(form, section) input {
   height: 30px;
   font-size: 18px;
 }
-form button {
+:is(form, section) button {
   margin-top: 30px;
   height: 35px;
   border-radius: 8px;
@@ -196,7 +285,7 @@ form button {
   color: white;
   font-size: 16px;
 }
-form button:active {
+:is(form, section) button:active {
   background-color: var(--dark-gray-active);
 }
 form.sign {
@@ -266,7 +355,7 @@ img[alt="profile"] {
   border-radius: 8px;
   border: none;
   background-color: var(--dark-gray);
-  color: white;
+  color: var(--white);
 }
 .room_password form {
   gap: 20px;
@@ -303,8 +392,15 @@ img[alt="profile"] {
     height: 50px;
   }
 
-  form {
+  form,
+  section {
     width: 90vw;
+  }
+  section {
+    gap: 10px;
+  }
+  section input {
+    width: 90%;
   }
   .room_password form {
     padding-top: 20px;
@@ -316,6 +412,31 @@ img[alt="profile"] {
   }
   .room_password button {
     width: 90%;
-    margin-top: 20px;
+  }
+}
+
+@media (max-width: 550px) {
+  header h2 {
+    font-size: 20px;
+  }
+  header .darkmode {
+    margin-right: 10px;
+  }
+  header .login_btn {
+    width: 60px;
+    font-size: 12px;
+  }
+  main.home h2 {
+    font-size: 5vw;
+  }
+  footer h3 {
+    text-align: left;
+    padding-left: 20px;
+  }
+  footer .address_box {
+    padding: 20px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 }

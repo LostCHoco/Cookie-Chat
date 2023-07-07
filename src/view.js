@@ -11,6 +11,20 @@ import { userState, roomRepository, loginState } from "repository";
 import { socket } from "socket";
 import { useEffect } from "react";
 import { RoomPwd } from "components/password";
+import { Setting } from "components/setting";
+import { MainInHome } from "components/home";
+import { Footer } from "components/footer";
+
+export const Home = () => {
+  //홈 렌더링
+  return (
+    <>
+      <Header />
+      <MainInHome />
+      <Footer />
+    </>
+  );
+};
 
 export const WaitingRoom = () => {
   //대기방 렌더링
@@ -87,6 +101,13 @@ export const SignUp = () => (
   <>
     <Header />
     <SignUpForm />
+  </>
+);
+export const UserSetting = () => (
+  //사용자 설정화면 렌더링
+  <>
+    <Header />
+    <Setting />
   </>
 );
 export const NotFound = () => {

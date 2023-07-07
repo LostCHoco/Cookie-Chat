@@ -119,6 +119,7 @@ i[class*="plus"] {
   margin-right: 41px;
   margin-bottom: 20px;
 }
+
 .input_box.password [type="checkbox"] {
   position: absolute;
   right: -41px;
@@ -155,7 +156,11 @@ i[class*="plus"] {
 @media (max-width: 1024px) {
   .room_box {
     grid-template-columns: 1fr;
-    gap: 20px;
+    gap: 12px;
+    margin-top: 12px;
+  }
+  .room_controller {
+    margin-top: 12px;
   }
   .room_controller,
   .room_entrance {
@@ -163,23 +168,35 @@ i[class*="plus"] {
   }
 }
 @media (max-width: 550px) {
+  .room_box {
+    gap: 8px;
+    margin-top: 8px;
+  }
+  .room_controller {
+    margin-top: 8px;
+  }
   .room_entrance {
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
+    padding: 5px 20px;
+    height: fit-content;
   }
   .room_entrance h1 {
-    font-size: 24px;
+    font-size: 20px;
+  }
+  .room_entrance h3 {
+    font-size: 16px;
   }
   .room_entrance .meta {
-    gap: 62vw;
+    width: 100%;
+    justify-content: space-between;
+    align-items: flex-end;
   }
   .room_entrance .meta .lock {
     margin: 0;
   }
   .lock_prop {
     margin: 0;
-  }
-  .lock_prop svg {
     font-size: 20px;
   }
   .create_setting {

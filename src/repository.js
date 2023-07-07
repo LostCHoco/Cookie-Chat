@@ -58,13 +58,6 @@ export const getRoomsLength = selector({
     return rooms.length;
   },
 });
-// export const getNameArray = selector({
-//   key: "getNameArray",
-//   get: ({ get }) => {
-//     const { userList } = get(roomRepository);
-//     return Object.values(userList);
-//   },
-// });
 export const chatRepository = atom({
   key: "chatRepository",
   default: {},

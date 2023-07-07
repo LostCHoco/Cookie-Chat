@@ -19,18 +19,16 @@ const SocialButton = ({ name, action }) => {
   const buttonText = convertToKorean(name);
   //소셜미디어 로그인 버튼 컴포넌트
   return (
-    <form>
       <button type="button" className={buttonName} onClick={action}>
         <div className="social_icon flex">
           <i className={iconName}></i>
         </div>
         {buttonText} 로그인
       </button>
-    </form>
   );
 };
 
-const Input = ({ name, hook, type = "text" }) => {
+export const Input = ({ name, hook, type = "text" }) => {
   const key = useId();
   const [state, setState, error] = hook;
   const hasError = error === undefined ? false : true;
@@ -63,7 +61,7 @@ export const SignInForm = () => {
   function login() {
     signInWithEmailAndPassword(auth, email, pwd)
       .then(() => {
-        nav("/");
+        nav("/room");
       })
       .catch((e) => {
         console.log(e.code);
@@ -81,18 +79,22 @@ export const SignInForm = () => {
         console.log(error);
       });
   }
+  function pressEnter(e) {
+    if (e.keyCode === 13) login();
+  }
   //로그인 컴포넌트
   return (
     <main>
-      <form className="sign">
+      <form className="sign" onKeyDown={(e) => pressEnter(e)}>
         <Input name="이메일" hook={[email, setEmail]} />
         <Input name="비밀번호" hook={[pwd, setPwd]} type="password" />
         <button type="button" onClick={login}>
           로그인
         </button>
         <p className="error_msg">{errorMsg}</p>
+        <hr/>
+        <SocialButton name="google" action={googleLogin} />
       </form>
-      <SocialButton name="google" action={googleLogin} />
     </main>
   );
 };
@@ -137,16 +139,27 @@ export const SignUpForm = () => {
       return true;
     }
   }
+  function checkName() {
+    const empty = checkEmpty([nickname, setNicknameError], "닉네임");
+    if (!empty) {
+      return false;
+    } else if (nickname.length > 8) {
+      setNicknameError("닉네임은 8자리 이하로 입력해주세요.");
+      return false;
+    } else {
+      setNicknameError("");
+      return true;
+    }
+  }
   function checkAll() {
     let isEmpty = false;
     isEmpty = checkEmpty([email, setEmailError], "이메일");
-    isEmpty = checkEmpty([nickname, setNicknameError], "닉네임");
     isEmpty = checkPwd();
+    isEmpty = checkName();
     return isEmpty;
   }
   function signUp() {
     if (!checkAll()) return false;
-
     createUserWithEmailAndPassword(auth, email, pwd)
       .then((userCredential) => {
         // Signed in

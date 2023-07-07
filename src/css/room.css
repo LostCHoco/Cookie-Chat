@@ -24,7 +24,7 @@
   background-color: var(--white);
   border-radius: 100%;
   cursor: pointer;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow);
   filter: opacity(0.6);
 }
 .output_box .new_msg:is(:hover, :active) {
@@ -55,9 +55,22 @@
   padding: 10px;
 }
 
-.output .content pre {
+/* .output .content pre {
   white-space: pre-wrap;
   word-break: break-all;
+} */
+.output .content p {
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+.output .content p a {
+  color: var(--hyperlink);
+}
+.output .content p a:hover {
+  color: var(--hyperlink-hover);
+}
+.output .content p a:active {
+  color: var(--hyperlink-active);
 }
 .input {
   position: relative;
@@ -126,19 +139,36 @@ i[class$="send"] {
   aside .login_user {
     width: fit-content;
     background-color: var(--semi-white);
-    padding: 10px 0;
+    padding: 5px 0;
   }
   .login_users {
     display: flex;
     overflow-x: scroll;
-    padding: 5px;
+    padding: 0 5px;
     background-color: var(--semi-white);
   }
   .login_user {
-    justify-content: flex-start;
-    gap: 15px;
+    flex-direction: column;
+    gap: 3px;
     cursor: default;
     margin-right: 10px;
+    position: relative;
+  }
+  .login_user h4 {
+    display: none;
+    font-size: 12px;
+    position: absolute;
+  }
+  .login_user:hover h4 {
+    width: max-content;
+    display: block;
+    background-color: var(--white);
+    border-radius: 3px;
+    filter: opacity(0.8);
+    bottom: 10px;
+  }
+  .sub_profile {
+    padding-left: 0;
   }
   .chat_box {
     height: calc(88vh - 100px);
